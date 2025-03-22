@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,5 +45,13 @@ public class CategoryController {
         return new ResponseEntity<>(
                 categoryMapper.toDto( savedCategory ),
                 HttpStatus.CREATED );
+    }
+
+
+    @DeleteMapping( "/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID id) {
+        log.info( "Delete category with id {}", id);
+        categoryService.deleteCategory( id );
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
