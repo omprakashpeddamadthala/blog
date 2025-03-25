@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid  @RequestBody LoginRequest loginRequest) {
-        log.info( "Login user with email {}", loginRequest.getEmail() );
+        log.info( "Loggedin user with email {}", loginRequest.getEmail() );
 
         UserDetails user = authenticationService.login(loginRequest);
 

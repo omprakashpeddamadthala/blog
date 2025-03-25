@@ -38,6 +38,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy( SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers( HttpMethod.POST,"/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
                         .requestMatchers( HttpMethod.GET, PUBLIC_URLS).permitAll()
                         .anyRequest()
                         .authenticated()
