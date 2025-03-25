@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class User {
+public class    User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

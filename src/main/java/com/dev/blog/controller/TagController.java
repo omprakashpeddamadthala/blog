@@ -1,7 +1,7 @@
 package com.dev.blog.controller;
 
+import com.dev.blog.domain.dtos.TagDTO;
 import com.dev.blog.domain.dtos.TagRequest;
-import com.dev.blog.domain.dtos.TagResponse;
 import com.dev.blog.domain.entities.Tag;
 import com.dev.blog.mappers.TagMapper;
 import com.dev.blog.service.TagService;
@@ -25,15 +25,15 @@ public class TagController {
     private final TagMapper tagMapper;
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTag(@RequestBody TagRequest tagRequest) {
+    public ResponseEntity<List<TagDTO>> createTag(@RequestBody TagRequest tagRequest) {
         log.info( "Create new tag" );
-        List<Tag> savedTags = tagService.createTags(tagRequest.getNames());
-        List<TagResponse> createdTagResponse = savedTags.stream().map(tagMapper::toTagResponse).toList();
+        List<Tag> savedTags = tagService.createTags( tagRequest.getNames() );
+        List<TagDTO> createdTagResponse = savedTags.stream().map( tagMapper::toTagResponse ).toList();
         return new ResponseEntity<>( createdTagResponse, HttpStatus.CREATED );
     }
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
+    public ResponseEntity<List<TagDTO>> getAllTags() {
         log.info( "Get all tags" );
         List<Tag> tags = tagService.getAllTags();
         return ResponseEntity.ok( tagMapper.toTagResponseList( tags ) );
@@ -44,7 +44,7 @@ public class TagController {
     public ResponseEntity<?> deleteTag(@PathVariable UUID id) {
         log.info( "Delete tag with id {}", id );
         tagService.deleteTag( id );
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>( HttpStatus.NO_CONTENT );
     }
 
 
