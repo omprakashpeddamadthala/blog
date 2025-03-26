@@ -3,6 +3,7 @@ package com.dev.blog.service.impl;
 import com.dev.blog.domain.entities.Tag;
 import com.dev.blog.repository.TagRepository;
 import com.dev.blog.service.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,12 +55,23 @@ public class TagServiceImpl implements TagService {
     @Override
     public void deleteTag(UUID id) {
         log.info( "Delete tag with id {}", id );
-       Optional<Tag> tags = repository.findByTagId( id );
-        if(tags.isPresent()){
-            if(!tags.get().getPosts().isEmpty()) {
-                throw new IllegalStateException("Tag has posts associated with it");
+        Optional<Tag> tags = repository.findByTagId( id );
+        if (tags.isPresent()) {
+            if (!tags.get().getPosts().isEmpty()) {
+                throw new IllegalStateException( "Tag has posts associated with it" );
             }
             repository.deleteById( id );
         }
+    }
+
+    @Override
+    public List<Tag> getTagByIds(Set<UUID> tagIds) {
+        log.info( "Get tags with ids {}", tagIds );
+        List<Tag> foundTags = repository.findAllById( tagIds );
+        if(foundTags.size() != tagIds.size()) {
+            throw new EntityNotFoundException("Not all specified tags Id's exist");
+        }
+        return foundTags;
+
     }
 }

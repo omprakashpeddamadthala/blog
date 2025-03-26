@@ -3,6 +3,7 @@ package com.dev.blog.service.impl;
 import com.dev.blog.domain.entities.Category;
 import com.dev.blog.repository.CategoryRepository;
 import com.dev.blog.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,5 +44,12 @@ public class CategoryServiceImpl implements CategoryService {
             }
             categoryRepository.delete(category.get());
         }
+    }
+
+    @Override
+    public Category getCategoryById(UUID categoryId) {
+        return  categoryRepository.findById(categoryId)
+                .orElseThrow(()->new EntityNotFoundException("Category with id " + categoryId + " not found"));
+
     }
 }

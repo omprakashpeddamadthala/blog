@@ -20,4 +20,6 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     @Query("SELECT t FROM Tag t WHERE t.id = :id")
     Optional<Tag> findByTagId(UUID id);
+
+    Set<Tag> findAllByIdIn(Set<UUID> tagIds);
 }
