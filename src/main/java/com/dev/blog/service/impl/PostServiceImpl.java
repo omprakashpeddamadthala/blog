@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,6 +83,41 @@ public class PostServiceImpl implements PostService {
                 .tags( new HashSet<>(tags) )
                 .build();
         return postRepository.save( newPost );
+    }
+
+    @Override
+    public Post getPostById(UUID id) {
+        return postRepository.findById( id ).orElseThrow(
+                () -> new EntityNotFoundException( "Post with id " + id + " not found" )
+        );
+    }
+
+    @Override
+    public void deletePost(UUID id) {
+        Post post = getPostById( id );
+        postRepository.delete( post );
+    }
+
+    @Override
+    public Post updatePost(UUID id, PostRequestDTO updatedPostRequest) {
+        Post existingPost = getPostById( id );
+        existingPost.setTitle( updatedPostRequest.getTitle() );
+        existingPost.setContent( updatedPostRequest.getContent() );
+        existingPost.setReadingTime( calculateReadingTime( updatedPostRequest.getContent() ) );
+        UUID updatePostRequestCategoryId = updatedPostRequest.getCategoryId();
+        if(!existingPost.getCategory().getId().equals(updatePostRequestCategoryId)) {
+            Category newCategory = categoryService.getCategoryById(updatePostRequestCategoryId);
+            existingPost.setCategory(newCategory);
+        }
+
+        Set<UUID> existingTagIds = existingPost.getTags().stream().map(Tag::getId).collect( Collectors.toSet());
+        Set<UUID> updatePostRequestTagIds = updatedPostRequest.getTagIds();
+        if(!existingTagIds.equals(updatePostRequestTagIds)) {
+            List<Tag> newTags = tagService.getTagByIds(updatePostRequestTagIds);
+            existingPost.setTags(new HashSet<>(newTags));
+        }
+
+        return postRepository.save(existingPost);
     }
 
     private Integer calculateReadingTime(String content) {

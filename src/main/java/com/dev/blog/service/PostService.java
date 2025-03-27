@@ -14,4 +14,10 @@ public interface PostService {
     List<Post> getAllDraftsPosts(User loggedInUser);
 
     Post createPost(User loggedInUser, PostRequestDTO postRequestDTO);
+
+    Post getPostById(UUID id);
+
+    void deletePost(UUID id);
+
+    Post updatePost(UUID id, PostRequestDTO postRequestDTO);
 }

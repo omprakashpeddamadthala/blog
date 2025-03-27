@@ -25,7 +25,7 @@ public class SecurityConfig {
     public static final String[] PUBLIC_URLS = {
             "/api/v1/auth/**",
             "/api/v1/categories/**",
-            "/api/v1/post/**",
+            "/api/v1/posts/**",
             "/api/v1/tags/**"
     };
 
