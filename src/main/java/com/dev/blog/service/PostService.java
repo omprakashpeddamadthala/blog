@@ -1,5 +1,6 @@
 package com.dev.blog.service;
 
+import com.dev.blog.domain.dtos.PostRequestDTO;
 import com.dev.blog.domain.entities.Post;
 import com.dev.blog.domain.entities.User;
 
@@ -11,4 +12,12 @@ public interface PostService {
     List<Post> getAllPosts(UUID categoryId, UUID tagId);
 
     List<Post> getAllDraftsPosts(User loggedInUser);
+
+    Post createPost(User loggedInUser, PostRequestDTO postRequestDTO);
+
+    Post getPostById(UUID id);
+
+    void deletePost(UUID id);
+
+    Post updatePost(UUID id, PostRequestDTO postRequestDTO);
 }
